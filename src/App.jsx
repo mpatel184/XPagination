@@ -1,34 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [employee, setEmployee] = useState([])
+  const rowPerPage = 10
+  const [currentPage, setCurrentPage] = useState(1)
+  const fetchdata = async () => {
+    try {
+      let response = await axios.get('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
+      setEmployee(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    fetchdata()
+  }, [])
 
+  const totalPages = Math.ceil(employee.length / rowPerPage);
+  const currentEmployees = employee.slice(
+    (currentPage - 1) * rowPerPage,
+    currentPage * rowPerPage
+  );
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "50px",width:"100vw" }}>
+      <h1 style={{ position: "fixed", top: "0" }}>Employee Data Table</h1>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentEmployees.map((employee) => (
+              <tr key={employee.id}>
+                <td>{employee.id}</td>
+                <td>{employee.name}</td>
+                <td>{employee.email}</td>
+                <td>{employee.role}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            {currentPage}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
