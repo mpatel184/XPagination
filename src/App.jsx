@@ -55,9 +55,9 @@ function App() {
           >
             Previous
           </button>
-          <span>
+          <p>
             {currentPage}
-          </span>
+          </p>
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
