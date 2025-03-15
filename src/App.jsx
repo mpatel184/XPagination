@@ -51,7 +51,6 @@ function App() {
         <div className="pagination">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
           >
             Previous
           </button>
