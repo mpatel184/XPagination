@@ -18,21 +18,14 @@ function App() {
   useEffect(() => {
     fetchdata()
   }, [])
-  useEffect(() => {
-    console.log("Current Page Updated:", currentPage);
-  }, [currentPage]);
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
+  
   const totalPages = Math.ceil(employee.length / rowPerPage);
   const currentEmployees = employee.slice(
     (currentPage - 1) * rowPerPage,
     currentPage * rowPerPage
   );
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "50px", width: "100vw" }}>
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "50px",width:"100vw" }}>
       <h1 style={{ position: "fixed", top: "0" }}>Employee Data Table</h1>
       <div>
         <table className='table'>
@@ -55,13 +48,23 @@ function App() {
             ))}
           </tbody>
         </table>
-        <button onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>{currentPage}</span>
-        <button onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} disabled={currentPage === totalPages}>
-          Next
-        </button>
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            {currentPage}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   )
