@@ -19,7 +19,7 @@ function App() {
     fetchdata()
   }, [])
   
-  const totalPages = Math.ceil(employee.length / rowPerPage);
+  const totalPages = Math.max(1, Math.ceil(employee.length / rowPerPage));
   const currentEmployees = employee.slice(
     (currentPage - 1) * rowPerPage,
     currentPage * rowPerPage
