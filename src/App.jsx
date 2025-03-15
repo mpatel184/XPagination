@@ -11,6 +11,7 @@ function App() {
       let response = await axios.get('https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json')
       setEmployee(response.data)
     } catch (error) {
+      alert('Failed to fetch data');
       console.log(error)
     }
   }
